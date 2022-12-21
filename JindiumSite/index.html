@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConenctFourAI</title>
+    <link rel="stylesheet" href="./style/main.min.css">
+</head>
+
+<body>
+    <main>
+        <section id="grid">
+
+        </section>
+
+        <aside>
+            <header>
+                <h1>Connect Four</h1>
+                <div>
+                    <p id="turn">Loading...</p>
+                    <div id="turnColour"></div>
+                </div>
+            </header>
+
+            <div class="content">
+                <h2>The Game</h2>
+                <p>Connect Four is a two-player board game in which the players take turns dropping coloured pieces from the top into a grid. The objective of the game is to be the first player to get four of their coloured discs in a row, either horizontally, vertically, or diagonally.</p>
+                <p>The grid consists of a vertical stack of seven columns and six rows. Players take turns dropping their discs into the top of one of the columns, and the disc falls to the lowest unoccupied row in that column.</p>
+                <p>The game ends when one of the players gets four of their discs in a row or when the grid is full and there is no winner.</p>
+
+                <h2>MiniMax</h2>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi, cupiditate quisquam? Tenetur quo, temporibus ex iure porro eos quis assumenda enim, quos quas repudiandae neque minus necessitatibus magnam ad soluta!</p>
+            </div>
+
+            <hr>
+
+            <div class="content moves">
+                <table id="moves">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Column</th>
+                            <th>Player</th>
+                            <th>Iterations</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </aside>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="./main.js"></script>
+</body>
+
+</html>
