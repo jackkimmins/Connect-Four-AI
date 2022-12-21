@@ -77,7 +77,7 @@ function PlaceCell(colNum)
 function AddMove(column, player, numIterations = null, score = null)
 {
     //if there are more than 7 rows, then remove the last row in the table
-    if (movesCount > 6)
+    if (movesCount > 5)
     {
         $('#moves tbody tr:last').remove();
     }

@@ -35,7 +35,7 @@ public class Program
                 localPlay.Play();
                 break;
             }
-            else if (input == "web")
+            else if (input == "web" || input == "")
             {
                 ConnectFourWebServer webServer = new ConnectFourWebServer();
                 webServer.Start();

@@ -72,6 +72,30 @@ main {
             p {
                 margin-bottom: 10px;
             }
+
+            .buttons {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-direction: row;
+
+                button {
+                    padding: 10px 20px;
+                    border: none;
+                    background-color: #4a8381;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease-in-out;
+                    width: 100%;
+                    margin: 0 3px;
+
+                    &:hover {
+                        background-color: #f1d340;
+                        color: #4a8381;
+                    }
+                }
+            }
         }
 
         .moves {
