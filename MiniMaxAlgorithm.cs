@@ -337,6 +337,64 @@ public class MiniMaxAlgorithm
         return bestScore;
     }
 
+    private List<int> columnOrder = new List<int>();
+
+    /**
+     * Reccursively score connect 4 position using negamax variant of alpha-beta algorithm.
+     * @param: alpha < beta, a score window within which we are evaluating the position.
+     *
+     * @return the exact score, an upper or lower bound score depending of the case:
+     * - if actual score of position <= alpha then actual score <= return value <= alpha
+     * - if actual score of position >= beta then beta <= return value <= actual score
+     * - if alpha <= actual score <= beta then return value = actual score
+     */
+    private int Negamax(ref Board board, int depth, int alpha, int beta)
+    {
+        iterations++;
+
+        if (depth == 0 || IsTerminal(board))
+        {
+            return Evaluate(board);
+        }
+
+        // check if current player can win next move
+        int winningMove = board.NextWinningMove(board);
+        if (winningMove != -1)
+        {
+            return board.NUM_COL * board.NUM_ROW + 1 - depth / 2;
+        }
+
+        // upper bound of our score as we cannot win immediately
+        int max = board.NUM_COL * board.NUM_ROW - depth / 2;
+        if (beta > max)
+        {
+            beta = max;
+            if (alpha >= beta)
+            {
+                return beta;
+            }
+        }
+
+        // compute the score of all possible next move and keep the best one
+        foreach (int move in ValidMoves(board))
+        {
+            Board newBoard = new Board(board);
+            newBoard.MakeMove(move, 1);
+
+            int score = -Negamax(ref newBoard, depth - 1, -beta, -alpha);
+            if (score > alpha)
+            {
+                alpha = score;
+                if (alpha >= beta)
+                {
+                    break;
+                }
+            }
+        }
+
+        return alpha;
+    }
+
     //Checks if the current player has a winning move, if so, return that move
     public ReturnMove GetQuickMove(Board board)
     {
@@ -376,11 +434,23 @@ public class MiniMaxAlgorithm
             }
         }
 
+        // Parallel.ForEach(ValidMoves(board), move =>
+        // {
+        //     Board newBoard = new Board(board);
+        //     newBoard.MakeMove(move, 1);
+        //     int score = Minimax(newBoard, DEPTH, int.MinValue, int.MaxValue, false);
+        //     if (score > bestScore)
+        //     {
+        //         bestScore = score;
+        //         bestMove = move;
+        //     }
+        // });
+
         Parallel.ForEach(ValidMoves(board), move =>
         {
             Board newBoard = new Board(board);
             newBoard.MakeMove(move, 1);
-            int score = Minimax(newBoard, DEPTH, int.MinValue, int.MaxValue, false);
+            int score = Negamax(ref newBoard, DEPTH, int.MinValue, int.MaxValue);
             if (score > bestScore)
             {
                 bestScore = score;
