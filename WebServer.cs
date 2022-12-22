@@ -7,7 +7,7 @@ namespace ConnectFourAI;
 class Game
 {
     public Board board = new Board();
-    public MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(10, true);
+    public MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(11, true);
 }
 
 public class ConnectFourWebServer

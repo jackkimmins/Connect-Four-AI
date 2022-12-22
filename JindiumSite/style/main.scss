@@ -139,6 +139,7 @@ main {
             width: 150px;
             height: 150px;
             background-color: #e7f9fa;
+            // background-image: url("../img/brushed-alum-dark.png");
 
             //if the cell has no children, make a pseudo element to make it look like a circle and center it
             &:empty::before {
@@ -148,7 +149,7 @@ main {
                 height: 80%;
                 margin: 10% auto;
                 border-radius: 50%;
-                background-color: rgba(219, 120, 81, 0.1);
+                background-color: #e8ecea;
                 box-shadow: inset 2px 2px 5px 0px rgba(0,0,0,0.1);
             }
         }
@@ -223,6 +224,46 @@ main {
             .cell {
                 width: 100px;
                 height: 100px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 800px) {
+    main {
+        #grid {
+            grid-gap: 5px;
+
+            .cell {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    }
+}
+
+//Less than 600px
+@media screen and (max-width: 600px) {
+    main {
+        #grid {
+            grid-gap: 2px;
+
+            .cell {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 400px) {
+    main {
+        #grid {
+            grid-gap: 0px;
+
+            .cell {
+                width: 40px;
+                height: 40px;
             }
         }
     }
