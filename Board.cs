@@ -200,20 +200,23 @@ public class Board
     public int NextWinningMove(Board board)
     {
         int returnValue = -1;
+        int targetPlayer = board.currentPlayerTurn;
+
+        //if the target can win in the next move, return that move
+        //else if the opponent can win in the next move, block that move
 
         Parallel.For(1, 7, (i, state) =>
         {
             //Loop over both players
             for (int j = 1; j <= 2; j++)
             {
-                Board b = new Board(board);
-                if (b.MakeMove(i, j))
+                Board tempBoard = new Board(board);
+                if (tempBoard.MakeMove(i, j))
                 {
-                    if (WinningMove(b) == j)
+                    if (WinningMove(tempBoard) == j)
                     {
-                        state.Break();
                         returnValue = i;
-                        return;
+                        state.Stop();
                     }
                 }
             }

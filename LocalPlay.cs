@@ -7,7 +7,7 @@ public class LocalPlay
     public void Play()
     {
         Board board = new Board();
-        MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(11, true);
+        MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(12, true);
 
         int moveNum = 0;
         

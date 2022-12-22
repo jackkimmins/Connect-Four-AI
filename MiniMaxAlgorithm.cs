@@ -36,22 +36,6 @@ public class MoveCache
         return newBoard;
     }
 
-    //Flip the board vertically
-    private static Board FlipBoard(Board board)
-    {
-        Board newBoard = new Board(board);
-        
-        for (int i = 0; i < board.NUM_ROW; i++)
-        {
-            for (int j = 0; j < board.NUM_COL; j++)
-            {
-                newBoard.board[i, j] = board.board[board.NUM_ROW - i - 1, j];
-            }
-        }
-
-        return newBoard;
-    }
-
     private static bool AppendToFile(string board, ReturnMove move)
     {
         try
@@ -112,16 +96,6 @@ public class MoveCache
         {
             ReturnMove move = boardCache[HashBoard(ReverseBoard(board))];
             return new ReturnMove(move.Column, -move.Score, move.Iterations);
-        }
-        else if (boardCache.ContainsKey(HashBoard(FlipBoard(board))))
-        {
-            ReturnMove move = boardCache[HashBoard(FlipBoard(board))];
-            return new ReturnMove(move.Column, -move.Score, move.Iterations);
-        }
-        else if (boardCache.ContainsKey(HashBoard(FlipBoard(ReverseBoard(board)))))
-        {
-            ReturnMove move = boardCache[HashBoard(FlipBoard(ReverseBoard(board)))];
-            return new ReturnMove(move.Column, move.Score, move.Iterations);
         }
         else return new ReturnMove(-1, 0, 0);
     }
@@ -422,7 +396,7 @@ public class MiniMaxAlgorithm
 
         ReturnMove returnMove = new ReturnMove(bestMove, bestScore, iterations, transpositionTable.Collisions);
 
-        if (UseCache) Task.Run(() => MoveCache.AddToCache(board, returnMove));
+        // if (UseCache) Task.Run(() => MoveCache.AddToCache(board, returnMove));
 
         // transpositionTable.Reset();
 
