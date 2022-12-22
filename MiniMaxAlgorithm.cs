@@ -36,6 +36,22 @@ public class MoveCache
         return newBoard;
     }
 
+    //Flip the board vertically
+    private static Board FlipBoard(Board board)
+    {
+        Board newBoard = new Board(board);
+        
+        for (int i = 0; i < board.NUM_ROW; i++)
+        {
+            for (int j = 0; j < board.NUM_COL; j++)
+            {
+                newBoard.board[i, j] = board.board[board.NUM_ROW - i - 1, j];
+            }
+        }
+
+        return newBoard;
+    }
+
     private static bool AppendToFile(string board, ReturnMove move)
     {
         try
@@ -63,6 +79,7 @@ public class MoveCache
                 string? line = "";
                 while ((line = sr.ReadLine()) != null)
                 {
+                    if (line.StartsWith("#")) continue;
                     string[] split = line.Split(',');
                     boardCache.Add(split[0], new ReturnMove(int.Parse(split[1]), int.Parse(split[2]), int.Parse(split[3])));
                 }
@@ -95,6 +112,16 @@ public class MoveCache
         {
             ReturnMove move = boardCache[HashBoard(ReverseBoard(board))];
             return new ReturnMove(move.Column, -move.Score, move.Iterations);
+        }
+        else if (boardCache.ContainsKey(HashBoard(FlipBoard(board))))
+        {
+            ReturnMove move = boardCache[HashBoard(FlipBoard(board))];
+            return new ReturnMove(move.Column, -move.Score, move.Iterations);
+        }
+        else if (boardCache.ContainsKey(HashBoard(FlipBoard(ReverseBoard(board)))))
+        {
+            ReturnMove move = boardCache[HashBoard(FlipBoard(ReverseBoard(board)))];
+            return new ReturnMove(move.Column, move.Score, move.Iterations);
         }
         else return new ReturnMove(-1, 0, 0);
     }
@@ -156,6 +183,12 @@ public class TranspositionTable
         Array.Clear(keys, 0, keys.Length);
         Array.Clear(values, 0, values.Length);
     }
+
+    //Get size in bytes
+    public long Size()
+    {
+        return (long)(keys.Length * sizeof(long) + values.Length * sizeof(int));
+    }
 }
 
 public class MiniMaxAlgorithm
@@ -165,8 +198,9 @@ public class MiniMaxAlgorithm
     public bool UseCache { get; set; }
     public int iterations { get; set; } = 0;
 
+    private TranspositionTable transpositionTable = new TranspositionTable();
 
-    public MiniMaxAlgorithm(int depth = 6, bool debug = false, bool useCache = false)
+    public MiniMaxAlgorithm(int depth = 6, bool debug = false, bool useCache = true)
     {
         DEPTH = depth;
         DebugMode = debug;
@@ -270,8 +304,6 @@ public class MiniMaxAlgorithm
         return score;
     }
 
-    private TranspositionTable transpositionTable = new TranspositionTable();
-
     //Use the transposition table to store the best move for a given board state
     private int Minimax(Board board, int depth, int alpha, int beta, bool maximizingPlayer)
     {
@@ -363,6 +395,9 @@ public class MiniMaxAlgorithm
             if (cachedMove.Column != -1)
             {
                 if (DebugMode) cText.WriteLine("Cache Hit!", "DEBUG", ConsoleColor.Green);
+
+                Thread.Sleep(new Random().Next(1000, 3000));
+
                 return cachedMove;
             }
         }
@@ -372,7 +407,6 @@ public class MiniMaxAlgorithm
             Board newBoard = new Board(board);
             newBoard.MakeMove(move, 1);
             int score = Minimax(newBoard, DEPTH, int.MinValue, int.MaxValue, false);
-            // int score = Negamax(newBoard, DEPTH, int.MinValue, int.MaxValue, false);
             if (score > bestScore)
             {
                 bestScore = score;
@@ -382,7 +416,7 @@ public class MiniMaxAlgorithm
 
         if (DebugMode)
         {
-            cText.WriteLine($"Best move: {bestMove} with score: {bestScore}\nOut of {iterations.ToString("N0")} iterations.", "DEBUG", ConsoleColor.Green);
+            cText.WriteLine($"Best move: {bestMove} with score: {bestScore} Out of {iterations.ToString("N0")} iterations.", "DEBUG", ConsoleColor.Green);
             // Thread.Sleep(2000);
         }
 
@@ -390,7 +424,7 @@ public class MiniMaxAlgorithm
 
         if (UseCache) Task.Run(() => MoveCache.AddToCache(board, returnMove));
 
-        transpositionTable.Reset();
+        // transpositionTable.Reset();
 
         return returnMove;
     }
