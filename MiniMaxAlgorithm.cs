@@ -331,54 +331,6 @@ public class MiniMaxAlgorithm
         return bestScore;
     }
 
-    private int Negamax(Board board, int depth, int alpha, int beta, bool maximizingPlayer)
-    {
-        iterations++;
-
-        if (depth == 0 || IsTerminal(board))
-        {
-            return Evaluate(board);
-        }
-
-        int bestScore = int.MinValue;
-
-        List<int> validMoves = ValidMoves(board);
-
-        foreach (int move in validMoves)
-        {
-            Board newBoard = new Board(board);
-            newBoard.MakeMove(move, maximizingPlayer ? 1 : 2);
-
-            int score = 0;
-
-            ulong key = newBoard.GetHash();
-
-            if (transpositionTable.Get(key) != 0)
-            {
-                score = transpositionTable.Get(key);
-            }
-            else
-            {
-                score = -Negamax(newBoard, depth - 1, -beta, -alpha, !maximizingPlayer);
-                transpositionTable.Put(key, score);
-            }
-
-            if (score > bestScore)
-            {
-                bestScore = score;
-                alpha = Math.Max(alpha, bestScore);
-            }
-
-            if (beta <= alpha)
-            {
-                break;
-            }
-
-        }
-
-        return bestScore;
-    }
-
     //Checks if the current player has a winning move, if so, return that move
     public ReturnMove GetQuickMove(Board board)
     {
