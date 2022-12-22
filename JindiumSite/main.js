@@ -255,6 +255,10 @@ function NewGame()
     CreateCells();
 }
 
+$('#reset').click(function() {
+    NewGame();
+});
+
 //On dom load
 $(document).ready(function() {
     NewGame();
