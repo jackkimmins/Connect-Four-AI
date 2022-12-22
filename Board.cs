@@ -98,9 +98,22 @@ public class Board
 
     public bool MakeMove(int column) => MakeMove(column, currentPlayerTurn);
 
+    //Find the next winning move and returns the column, if no winning move is found, returns 0. If it is a draw, returns -1
     public int WinningMove(Board board)
     {
         //Check Horizontal
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (board.board[i, j] != 0 &&
+                    board.board[i, j] == board.board[i, j + 1] &&
+                    board.board[i, j] == board.board[i, j + 2] &&
+                    board.board[i, j] == board.board[i, j + 3])
+                    return board.board[i, j];
+            }
+        }
+
         for (int i = 0; i < 6; i++)
         {
             for (int j = 0; j < 4; j++)

@@ -167,6 +167,22 @@ public class MiniMaxAlgorithm
         }
     }
 
+    //Checks if the current player has a winning move, if so, return that move
+    private ReturnMove GetQuickMove(Board board)
+    {
+        int winningMove = board.WinningMove(board);
+
+        Console.WriteLine("Winning move: " + winningMove);
+
+        if (winningMove != 0)
+        {
+            if (DebugMode) Console.WriteLine("Quick move found!");
+            return new ReturnMove(winningMove, 100, 0);
+        }
+
+        return new ReturnMove(-1, 0, 0);
+    }
+
     public ReturnMove GetBestMove(Board board)
     {
         iterations = 0;
@@ -174,6 +190,9 @@ public class MiniMaxAlgorithm
         int bestMove = 0;
 
         if (DebugMode) Console.WriteLine("Evaluating moves...");
+
+        ReturnMove quickMove = GetQuickMove(board);
+        if (quickMove.Column != -1) return quickMove;
 
         Parallel.ForEach(ValidMoves(board), move =>
         {
