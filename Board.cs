@@ -77,6 +77,34 @@ public class Board
         return boardList;
     }
 
+    public ulong GetHash()
+    {
+        ulong hash = 0;
+        for (int i = 0; i < NUM_ROW; i++)
+        {
+            for (int j = 0; j < NUM_COL; j++)
+            {
+                hash = hash * 3 + (ulong) board[i, j];
+            }
+        }
+        return hash;
+    }
+
+    public void UndoMove(int column)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (board[i, column - 1] != 0)
+            {
+                board[i, column - 1] = 0;
+                break;
+            }
+        }
+
+        moves--;
+        currentPlayerTurn = (currentPlayerTurn == 1) ? 2 : 1;
+    }
+
     public bool MakeMove(int column, int player)
     {
         if (column < 1 || column > 7) return false;

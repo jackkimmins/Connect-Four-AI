@@ -7,7 +7,7 @@ public class LocalPlay
     public void Play()
     {
         Board board = new Board();
-        MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(9, true);
+        MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(11, true);
         
         while (true)
         {
@@ -23,29 +23,33 @@ public class LocalPlay
             
             if (board.currentPlayerTurn == 1)
             {
-                int move = -1;
+                // int move = -1;
 
-                //Ensure that the move is valid an int between 1 and 7
-                while (move < 1 || move > 7 || board.board[0, move - 1] != 0)
-                {
-                    Console.Write("Enter column number (1-7): ");
-                    string input = Console.ReadLine() ?? "";
+                // //Ensure that the move is valid an int between 1 and 7
+                // while (move < 1 || move > 7 || board.board[0, move - 1] != 0)
+                // {
+                //     Console.Write("Enter column number (1-7): ");
+                //     string input = Console.ReadLine() ?? "";
 
-                    if (input == "?")
-                    {
-                        move = miniMax.GetBestMove(board).Column;
-                        break;
-                    }
-                    else if (input == "q")
-                    {
-                        Console.WriteLine("Quitting...");
-                        return;
-                    }
+                //     if (input == "?")
+                //     {
+                //         move = miniMax.GetBestMove(board).Column;
+                //         break;
+                //     }
+                //     else if (input == "q")
+                //     {
+                //         Console.WriteLine("Quitting...");
+                //         return;
+                //     }
 
-                    if (!int.TryParse(input, out move)) move = -1;
-                }
+                //     if (!int.TryParse(input, out move)) move = -1;
+                // }
 
-                board.MakeMove(move);
+                // board.MakeMove(move);
+
+                Random rand = new Random();
+                int move = rand.Next(1, 24);
+                board.MakeMove(move < 8 ? move : miniMax.GetBestMove(board).Column);
             }
             else
             {
@@ -54,5 +58,7 @@ public class LocalPlay
                 Console.WriteLine("Best move: " + bestMove.Column + " with score: " + bestMove.Score + " and iterations: " + bestMove.Iterations);
             }
         }
+
+        Play();
     }
 }
