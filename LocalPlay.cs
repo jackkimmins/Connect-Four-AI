@@ -8,6 +8,8 @@ public class LocalPlay
     {
         Board board = new Board();
         MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(11, true);
+
+        int moveNum = 0;
         
         while (true)
         {
@@ -17,6 +19,14 @@ public class LocalPlay
                 Console.WriteLine("Player " + board.WinningMove(board) + " wins!");
                 break;
             }
+
+            if (moveNum >= 10)
+            {
+                Console.WriteLine("Abort!");
+                break;
+            }
+
+            moveNum++;
         
             //Let the current player make a move
             Console.WriteLine("Player " + board.currentPlayerTurn + " make a move: ");
