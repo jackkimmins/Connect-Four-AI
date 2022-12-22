@@ -9,6 +9,11 @@
     padding: 0;
 }
 
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 body {
     width: 100%;
     min-height: 100vh;
@@ -160,7 +165,6 @@ main {
             }
         }
 
-        //Drop animation for pseudo element
         .player1, .player2 {
             &:empty::before {
                 animation: drop 1s;
@@ -169,22 +173,36 @@ main {
         }
 
         .hover {
-            // background-color: #edf5f5;
-
             &:empty::before {
                 background-color: #8be4e9!important;
             }
         }
+
+        .winning {
+            // box-shadow: inset 0px 0px 0px 8px #a2ff1d;
+            animation: flash 1s infinite;
+        }
     }
 }
 
-//Drop animation
 @keyframes drop {
     0% {
         transform: translateY(-1000%);
     }
     100% {
         transform: translateY(0);
+    }
+}
+
+@keyframes flash {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
     }
 }
 

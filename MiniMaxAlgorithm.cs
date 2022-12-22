@@ -170,14 +170,12 @@ public class MiniMaxAlgorithm
     //Checks if the current player has a winning move, if so, return that move
     private ReturnMove GetQuickMove(Board board)
     {
-        int winningMove = board.WinningMove(board);
+        int winningMove = board.NextWinningMove(board);
 
-        Console.WriteLine("Winning move: " + winningMove);
-
-        if (winningMove != 0)
+        if (winningMove != -1)
         {
-            if (DebugMode) Console.WriteLine("Quick move found!");
-            return new ReturnMove(winningMove, 100, 0);
+            if (DebugMode) cText.WriteLine("Quick Search Move Found", "DEBUG", ConsoleColor.Green);
+            return new ReturnMove(winningMove, 100, winningMove);
         }
 
         return new ReturnMove(-1, 0, 0);

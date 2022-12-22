@@ -38,3 +38,23 @@
 /root/CODE/CSharp/Jindium-ConnectFour/obj/Debug/net6.0/ref/ConnectFourAI.dll
 /root/CODE/CSharp/Jindium-ConnectFour/obj/Debug/net6.0/ConnectFourAI.pdb
 /root/CODE/CSharp/Jindium-ConnectFour/obj/Debug/net6.0/ConnectFourAI.genruntimeconfig.cache
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\bin\Debug\net6.0\ConnectFourAI.exe
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\bin\Debug\net6.0\ConnectFourAI.deps.json
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\bin\Debug\net6.0\ConnectFourAI.runtimeconfig.json
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\bin\Debug\net6.0\ConnectFourAI.dll
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\bin\Debug\net6.0\ConnectFourAI.pdb
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\bin\Debug\net6.0\AdvancedStringBuilder.dll
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\bin\Debug\net6.0\Jindium2.dll
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\bin\Debug\net6.0\WebMarkupMin.Core.dll
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ConnectFourAI.csproj.AssemblyReference.cache
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ConnectFourAI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ConnectFourAI.AssemblyInfoInputs.cache
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ConnectFourAI.AssemblyInfo.cs
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ConnectFourAI.csproj.CoreCompileInputs.cache
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ConnectFourAI.csproj.CopyComplete
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ConnectFourAI.dll
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\refint\ConnectFourAI.dll
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ConnectFourAI.pdb
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ConnectFourAI.genruntimeconfig.cache
+C:\Users\jackk\OneDrive\My Projects\Connect-Four-AI\obj\Debug\net6.0\ref\ConnectFourAI.dll

@@ -16,13 +16,81 @@ const CreateCells = (board = []) => {
 
     for (let i = 0; i < 42; i++)
     {
-        $('<div>').addClass('cell').attr('data-col', i % 7).appendTo('#grid');
+        $('<div>').addClass('cell').attr('data-col', i % 7).attr('data-row', Math.floor(i / 7)).appendTo('#grid');
     }
 }
 
 const GetColNum = (cell) => {
     return parseInt(cell.getAttribute('data-col'));
 }
+
+//Returns the 4 cells that make up a winning line
+const GetWinningCells = () => {
+    let winningCells = [];
+
+    //check horizontal
+    for (let i = 0; i < 6; i++)
+    {
+        for (let j = 0; j < 4; j++)
+        {
+            let cells = $(`.cell[data-row="${i}"][data-col="${j}"], .cell[data-row="${i}"][data-col="${j+1}"], .cell[data-row="${i}"][data-col="${j+2}"], .cell[data-row="${i}"][data-col="${j+3}"]`);
+            let cellsArr = cells.toArray();
+            if (cellsArr.every(c => c.classList.contains('player1')) || cellsArr.every(c => c.classList.contains('player2')))
+            {
+                winningCells = cellsArr;
+                break;
+            }
+        }
+    }
+
+    //check vertical
+    for (let i = 0; i < 3; i++)
+    {
+        for (let j = 0; j < 7; j++)
+        {
+            let cells = $(`.cell[data-row="${i}"][data-col="${j}"], .cell[data-row="${i+1}"][data-col="${j}"], .cell[data-row="${i+2}"][data-col="${j}"], .cell[data-row="${i+3}"][data-col="${j}"]`);
+            let cellsArr = cells.toArray();
+            if (cellsArr.every(c => c.classList.contains('player1')) || cellsArr.every(c => c.classList.contains('player2')))
+            {
+                winningCells = cellsArr;
+                break;
+            }
+        }
+    }
+
+    //check diagonal
+    for (let i = 0; i < 3; i++)
+    {
+        for (let j = 0; j < 4; j++)
+        {
+            let cells = $(`.cell[data-row="${i}"][data-col="${j}"], .cell[data-row="${i+1}"][data-col="${j+1}"], .cell[data-row="${i+2}"][data-col="${j+2}"], .cell[data-row="${i+3}"][data-col="${j+3}"]`);
+            let cellsArr = cells.toArray();
+            if (cellsArr.every(c => c.classList.contains('player1')) || cellsArr.every(c => c.classList.contains('player2')))
+            {
+                winningCells = cellsArr;
+                break;
+            }
+        }
+    }
+
+    //check diagonal
+    for (let i = 0; i < 3; i++)
+    {
+        for (let j = 3; j < 7; j++)
+        {
+            let cells = $(`.cell[data-row="${i}"][data-col="${j}"], .cell[data-row="${i+1}"][data-col="${j-1}"], .cell[data-row="${i+2}"][data-col="${j-2}"], .cell[data-row="${i+3}"][data-col="${j-3}"]`);
+            let cellsArr = cells.toArray();
+            if (cellsArr.every(c => c.classList.contains('player1')) || cellsArr.every(c => c.classList.contains('player2')))
+            {
+                winningCells = cellsArr;
+                break;
+            }
+        }
+    }
+
+    return winningCells;
+}
+
 
 $('#grid').on('mouseenter', '.cell', function() {
     if (gameEnded) return;
@@ -152,6 +220,12 @@ $('#grid').click(function(e) {
                     else
                     {
                         new Audio('./audio/win.mp3').play();
+                    }
+
+                    const winningCells = GetWinningCells();
+                    for (let i = 0; i < winningCells.length; i++)
+                    {
+                        winningCells[i].classList.add('winning');
                     }
 
                     $('#turn').text(winningMsg);

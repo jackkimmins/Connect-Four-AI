@@ -1,5 +1,5 @@
 {
   "ServerName": "Jindium",
-  "Address": "http://*:5500/",
+  "Address": "http://localhost:5500/",
   "Logging": false
 }

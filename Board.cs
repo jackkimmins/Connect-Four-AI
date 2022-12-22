@@ -168,4 +168,29 @@ public class Board
         if (board.IsFull()) return 3;
         return 0;
     }
+
+    public int NextWinningMove(Board board)
+    {
+        int returnValue = -1;
+
+        Parallel.For(1, 7, (i, state) =>
+        {
+            //Loop over both players
+            for (int j = 1; j <= 2; j++)
+            {
+                Board b = new Board(board);
+                if (b.MakeMove(i, j))
+                {
+                    if (WinningMove(b) == j)
+                    {
+                        state.Break();
+                        returnValue = i;
+                        return;
+                    }
+                }
+            }
+        });
+
+        return returnValue;
+    }
 }

@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "ZBc+2DcSjwbQZ9WbsyWld08ywWU456+lDh0aMnAkk8Nda5OCb6/gt5JExIhcMntIHDcUS0zeaJxbS5idlIDipw==",
+  "dgSpecHash": "toY+kZSq4SNGiXrPPnrjwupPIH4/tuta/uykKM6HdOkS+CeodONrRf+khYB0kQAK5Zindb78gZJOpLhrT+2vsw==",
   "success": true,
-  "projectFilePath": "/root/CODE/CSharp/Jindium-ConnectFour/ConnectFourAI.csproj",
+  "projectFilePath": "C:\\Users\\jackk\\OneDrive\\My Projects\\Connect-Four-AI\\ConnectFourAI.csproj",
   "expectedPackageFiles": [
-    "/root/.nuget/packages/advancedstringbuilder/0.1.0/advancedstringbuilder.0.1.0.nupkg.sha512",
-    "/root/.nuget/packages/jindium/2.1.2-alpha/jindium.2.1.2-alpha.nupkg.sha512",
-    "/root/.nuget/packages/newtonsoft.json/13.0.2/newtonsoft.json.13.0.2.nupkg.sha512",
-    "/root/.nuget/packages/webmarkupmin.core/2.9.0/webmarkupmin.core.2.9.0.nupkg.sha512"
+    "C:\\Users\\jackk\\.nuget\\packages\\advancedstringbuilder\\0.1.0\\advancedstringbuilder.0.1.0.nupkg.sha512",
+    "C:\\Users\\jackk\\.nuget\\packages\\jindium\\2.1.2-alpha\\jindium.2.1.2-alpha.nupkg.sha512",
+    "C:\\Users\\jackk\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512",
+    "C:\\Users\\jackk\\.nuget\\packages\\webmarkupmin.core\\2.9.0\\webmarkupmin.core.2.9.0.nupkg.sha512"
   ],
   "logs": []
 }
