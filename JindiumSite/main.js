@@ -144,12 +144,10 @@ function PlaceCell(colNum)
 
 function AddMove(column, player, numIterations = null, score = null)
 {
-    //if there are more than 7 rows, then remove the last row in the table
     if (movesCount > 5)
     {
         $('#moves tbody tr:last').remove();
     }
-
 
     let row = `<tr><td>#${movesCount+1}</td>
                    <td>${column}</td>
@@ -250,7 +248,6 @@ function NewGame()
     currentPlayer = 2;
     SwitchTurn();
     waitingForMove = false;
-    movesCount = 0;
 
     CreateCells();
 }

@@ -174,18 +174,23 @@ public class MiniMaxAlgorithm
 
     private TranspositionTable transpositionTable = new TranspositionTable();
 
-    public MiniMaxAlgorithm(int depth = 6, bool debug = false, bool useCache = true)
+    public MiniMaxAlgorithm(int depth = 6, bool debug = false, bool useCache = false)
     {
         DEPTH = depth;
         DebugMode = debug;
         UseCache = useCache;
     }
 
-   private List<int> ValidMoves(Board board)
+    private List<int> ValidMoves(ref Board board)
     {
-        return Enumerable.Range(1, board.NUM_COL)
-                         .Where(i => board.board[0, i - 1] == 0)
-                         .ToList();
+        List<int> validMoves = new List<int>();
+
+        for (int i = 0; i < board.NUM_COL; i++)
+        {
+            if (board.board[0, i] == 0) validMoves.Add(i + 1);
+        }
+
+        return validMoves;
     }
 
     private bool IsTerminal(Board board)
@@ -278,19 +283,42 @@ public class MiniMaxAlgorithm
         return score;
     }
 
+    //Checks if the current player has a winning move, if so, return that move
+    public ReturnMove GetQuickMove(Board board)
+    {
+        int winningMove = board.NextWinningMove(board);
+
+        if (winningMove != -1) return new ReturnMove(winningMove, 100, winningMove);
+        return new ReturnMove(-1, 0, 0);
+    }
+
+    private bool IsQuiet(ref Board board)
+    {
+        if (board.OpenFourInARowLines() > 0) return false;
+        if (board.OpenThreeInARowLines() > 0) return false;
+
+        return true;
+    }
+
     //Use the transposition table to store the best move for a given board state
     private int Minimax(Board board, int depth, int alpha, int beta, bool maximizingPlayer)
     {
         iterations++;
 
-        if (depth == 0 || IsTerminal(board))
+        if (depth == 0 || IsTerminal(board) || IsQuiet(ref board))
         {
             return Evaluate(board);
         }
 
+        ReturnMove quickMove = GetQuickMove(board);
+        if (quickMove.Column != -1)
+        {
+            return quickMove.Score;
+        }
+
         int bestScore = maximizingPlayer ? int.MinValue : int.MaxValue;
 
-        List<int> validMoves = ValidMoves(board);
+        List<int> validMoves = ValidMoves(ref board);
 
         foreach (int move in validMoves)
         {
@@ -334,79 +362,13 @@ public class MiniMaxAlgorithm
             }
         }
 
+        //Convert to parallel
+        Parallel.ForEach(validMoves, move =>
+        {
+           Board newBoard = new Board(board);
+        });
+
         return bestScore;
-    }
-
-    private List<int> columnOrder = new List<int>();
-
-    /**
-     * Reccursively score connect 4 position using negamax variant of alpha-beta algorithm.
-     * @param: alpha < beta, a score window within which we are evaluating the position.
-     *
-     * @return the exact score, an upper or lower bound score depending of the case:
-     * - if actual score of position <= alpha then actual score <= return value <= alpha
-     * - if actual score of position >= beta then beta <= return value <= actual score
-     * - if alpha <= actual score <= beta then return value = actual score
-     */
-    private int Negamax(ref Board board, int depth, int alpha, int beta)
-    {
-        iterations++;
-
-        if (depth == 0 || IsTerminal(board))
-        {
-            return Evaluate(board);
-        }
-
-        // check if current player can win next move
-        int winningMove = board.NextWinningMove(board);
-        if (winningMove != -1)
-        {
-            return board.NUM_COL * board.NUM_ROW + 1 - depth / 2;
-        }
-
-        // upper bound of our score as we cannot win immediately
-        int max = board.NUM_COL * board.NUM_ROW - depth / 2;
-        if (beta > max)
-        {
-            beta = max;
-            if (alpha >= beta)
-            {
-                return beta;
-            }
-        }
-
-        // compute the score of all possible next move and keep the best one
-        foreach (int move in ValidMoves(board))
-        {
-            Board newBoard = new Board(board);
-            newBoard.MakeMove(move, 1);
-
-            int score = -Negamax(ref newBoard, depth - 1, -beta, -alpha);
-            if (score > alpha)
-            {
-                alpha = score;
-                if (alpha >= beta)
-                {
-                    break;
-                }
-            }
-        }
-
-        return alpha;
-    }
-
-    //Checks if the current player has a winning move, if so, return that move
-    public ReturnMove GetQuickMove(Board board)
-    {
-        int winningMove = board.NextWinningMove(board);
-
-        if (winningMove != -1)
-        {
-            if (DebugMode) cText.WriteLine("Quick Search Move Found", "DEBUG", ConsoleColor.Green);
-            return new ReturnMove(winningMove, 100, winningMove);
-        }
-
-        return new ReturnMove(-1, 0, 0);
     }
 
     public ReturnMove GetBestMove(Board board)
@@ -428,29 +390,19 @@ public class MiniMaxAlgorithm
             {
                 if (DebugMode) cText.WriteLine("Cache Hit!", "DEBUG", ConsoleColor.Green);
 
-                Thread.Sleep(new Random().Next(1000, 3000));
+                // Thread.Sleep(new Random().Next(1000, 3000));
 
                 return cachedMove;
             }
         }
 
-        // Parallel.ForEach(ValidMoves(board), move =>
-        // {
-        //     Board newBoard = new Board(board);
-        //     newBoard.MakeMove(move, 1);
-        //     int score = Minimax(newBoard, DEPTH, int.MinValue, int.MaxValue, false);
-        //     if (score > bestScore)
-        //     {
-        //         bestScore = score;
-        //         bestMove = move;
-        //     }
-        // });
-
-        Parallel.ForEach(ValidMoves(board), move =>
+        Parallel.ForEach(ValidMoves(ref board), move =>
         {
             Board newBoard = new Board(board);
             newBoard.MakeMove(move, 1);
-            int score = Negamax(ref newBoard, DEPTH, int.MinValue, int.MaxValue);
+
+            int score = Minimax(newBoard, DEPTH, int.MinValue, int.MaxValue, false);
+
             if (score > bestScore)
             {
                 bestScore = score;

@@ -1,0 +1,94 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "ConnectFourAI/1.0.0": {
+        "dependencies": {
+          "Jindium": "2.1.2-alpha",
+          "Newtonsoft.Json": "13.0.2"
+        },
+        "runtime": {
+          "ConnectFourAI.dll": {}
+        }
+      },
+      "AdvancedStringBuilder/0.1.0": {
+        "runtime": {
+          "lib/netstandard2.0/AdvancedStringBuilder.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.1.0.0"
+          }
+        }
+      },
+      "Jindium/2.1.2-alpha": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2",
+          "WebMarkupMin.Core": "2.9.0"
+        },
+        "runtime": {
+          "lib/net6.0/Jindium2.dll": {
+            "assemblyVersion": "2.1.2.0",
+            "fileVersion": "2.1.2.0"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.2": {
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.2.27524"
+          }
+        }
+      },
+      "WebMarkupMin.Core/2.9.0": {
+        "dependencies": {
+          "AdvancedStringBuilder": "0.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.1/WebMarkupMin.Core.dll": {
+            "assemblyVersion": "2.9.0.0",
+            "fileVersion": "2.9.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ConnectFourAI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AdvancedStringBuilder/0.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IbN3r5whlJvi8MhCDPVpIb+NVScyUcKSdcJZrnoXFDyzPDISl3AbWouNBYIHRdZdfGuzqCQEhM1vkxbIKqQVaQ==",
+      "path": "advancedstringbuilder/0.1.0",
+      "hashPath": "advancedstringbuilder.0.1.0.nupkg.sha512"
+    },
+    "Jindium/2.1.2-alpha": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ED+zhcZFF71rFaSpIj1edAa04rua7MT8nFxw281j1Zf7qSQnW65vuuhet5p4Qdj/N3drKGck2cW28VvDKoyREg==",
+      "path": "jindium/2.1.2-alpha",
+      "hashPath": "jindium.2.1.2-alpha.nupkg.sha512"
+    },
+    "Newtonsoft.Json/13.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg==",
+      "path": "newtonsoft.json/13.0.2",
+      "hashPath": "newtonsoft.json.13.0.2.nupkg.sha512"
+    },
+    "WebMarkupMin.Core/2.9.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FlEMQbamh/L6nYa4A7coH0X3G6IynOM7q+/3Wub7Y4DVGyOEXHQbUHkvJ61RXtFnT9tagfzsn1iiSm3VoOumzw==",
+      "path": "webmarkupmin.core/2.9.0",
+      "hashPath": "webmarkupmin.core.2.9.0.nupkg.sha512"
+    }
+  }
+}

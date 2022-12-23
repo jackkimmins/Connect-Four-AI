@@ -209,4 +209,118 @@ public class Board
 
         return returnValue;
     }
+
+    public int OpenFourInARowLines()
+    {
+        int returnValue = 0;
+
+        //Check Horizontal
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (board[i, j] == 0 &&
+                    board[i, j + 1] == 0 &&
+                    board[i, j + 2] == 0 &&
+                    board[i, j + 3] == 0)
+                    returnValue++;
+            }
+        }
+
+        //Check Vertical
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (board[i, j] == 0 &&
+                    board[i + 1, j] == 0 &&
+                    board[i + 2, j] == 0 &&
+                    board[i + 3, j] == 0)
+                    returnValue++;
+            }
+        }
+
+        //Check Diagonal (top left to bottom right)
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (board[i, j] == 0 &&
+                    board[i + 1, j + 1] == 0 &&
+                    board[i + 2, j + 2] == 0 &&
+                    board[i + 3, j + 3] == 0)
+                    returnValue++;
+            }
+        }
+
+        //Check Diagonal (top right to bottom left)
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 3; j < 7; j++)
+            {
+                if (board[i, j] == 0 &&
+                    board[i + 1, j - 1] == 0 &&
+                    board[i + 2, j - 2] == 0 &&
+                    board[i + 3, j - 3] == 0)
+                    returnValue++;
+            }
+        }
+
+        return returnValue;
+    }
+
+    public int OpenThreeInARowLines()
+    {
+        int returnValue = 0;
+
+        //Check Horizontal
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                if (board[i, j] == 0 &&
+                    board[i, j + 1] == 0 &&
+                    board[i, j + 2] == 0)
+                    returnValue++;
+            }
+        }
+
+        //Check Vertical
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (board[i, j] == 0 &&
+                    board[i + 1, j] == 0 &&
+                    board[i + 2, j] == 0)
+                    returnValue++;
+            }
+        }
+
+        //Check Diagonal (top left to bottom right)
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                if (board[i, j] == 0 &&
+                    board[i + 1, j + 1] == 0 &&
+                    board[i + 2, j + 2] == 0)
+                    returnValue++;
+            }
+        }
+
+        //Check Diagonal (top right to bottom left)
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 2; j < 7; j++)
+            {
+                if (board[i, j] == 0 &&
+                    board[i + 1, j - 1] == 0 &&
+                    board[i + 2, j - 2] == 0)
+                    returnValue++;
+            }
+        }
+
+        return returnValue;
+    }
 }
