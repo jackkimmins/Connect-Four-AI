@@ -245,7 +245,7 @@ public class MiniMaxAlgorithm
             {
                 if (DebugMode) cText.WriteLine("Cache Hit! Col: " + cachedMove.Column, "DEBUG", ConsoleColor.Green);
 
-                // Thread.Sleep(new Random().Next(1000, 3000));
+                Thread.Sleep(new Random().Next(500, 3000));
 
                 return cachedMove;
             }
