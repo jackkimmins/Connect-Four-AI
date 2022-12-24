@@ -219,70 +219,6 @@ public class MiniMaxAlgorithm
         return bestScore;
     }
 
-    //Represents each move made by its column. e.g. 12642
-    string moveLog = "";
-
-    public ReturnMove GetBestMove(Board board, int col)
-    {
-        moveLog += col.ToString();
-
-        string boardHash = MoveCache.HashBoard(board);
-
-        ReturnMove cachedMove = MoveCache.CacheLookup(board);
-        if (cachedMove.Column != -1)
-        {
-            if (DebugMode) cText.WriteLine("Cache Hit!", "DEBUG", ConsoleColor.Green);
-            moveLog += cachedMove.Column.ToString();
-            return cachedMove;
-        }
-
-        cText.WriteLine("Making request...", "DEBUG", ConsoleColor.Green);
-        var result = Utilities.MakeGetRequest("https://connect4.gamesolver.org/solve?pos=" + moveLog);
-        cText.WriteLine(result, "DEBUG", ConsoleColor.Green);
-
-        //Get the values between [] and split them by , into int[]
-        string[] values = result.Substring(result.IndexOf('[') + 1, result.IndexOf(']') - result.IndexOf('[') - 1).Split(',');
-        int[] valuesInt = new int[values.Length];
-        for (int i = 0; i < values.Length; i++)
-        {
-            valuesInt[i] = int.Parse(values[i]);
-        }
-
-        //The int array should have 7 values, find the index that has the highest value
-        int index = 0;
-        int max = Int32.MinValue;
-        for (int i = 0; i < valuesInt.Length; i++)
-        {
-            if (valuesInt[i] > max)
-            {
-                max = valuesInt[i];
-                index = i;
-            }
-        }
-
-        index++;
-
-        Random rnd = new Random();
-
-        int score = (50 - moveLog.Length + 4) * rnd.Next(1_000, 1_000_000);
-
-        //Replace the last 2 numbers at the end with a number between 10 and 99
-        score = int.Parse(score.ToString().Substring(0, score.ToString().Length - 2) + rnd.Next(10, 99));
-
-        //Return the move
-        ReturnMove returnMove = new ReturnMove(index, max * 10, score);
-
-        // ReturnMove returnMove = GetBestMove(board);
-
-        moveLog += returnMove.Column.ToString();
-
-        cText.WriteLine("Move: " + returnMove.Column + " MoveLog: " + moveLog, "DEBUG", ConsoleColor.Green);
-
-        Task.Run(() => MoveCache.AddToCache(boardHash, returnMove));
-
-        return returnMove;
-    }
-
     public ReturnMove GetBestMove(Board board)
     {
         iterations = 0;
@@ -300,7 +236,7 @@ public class MiniMaxAlgorithm
             ReturnMove cachedMove = MoveCache.CacheLookup(board);
             if (cachedMove.Column != -1)
             {
-                if (DebugMode) cText.WriteLine("Cache Hit! " + cachedMove.Column, "DEBUG", ConsoleColor.Green);
+                if (DebugMode) cText.WriteLine("Cache Hit! Col: " + cachedMove.Column, "DEBUG", ConsoleColor.Green);
 
                 // Thread.Sleep(new Random().Next(1000, 3000));
 
