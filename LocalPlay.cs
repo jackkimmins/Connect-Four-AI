@@ -7,29 +7,28 @@ public class LocalPlay
     public void Play()
     {
         Board board = new Board();
-        MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(12, true);
+        MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(12, true, true);
 
         int moveNum = 0;
+        int playersMove = -1;
         
         while (true)
         {
             board.PrintBoard(true);
             if (board.WinningMove(board) != 0)
             {
-                Console.WriteLine("Player " + board.WinningMove(board) + " wins!");
+                cText.WriteLine("Player " + board.WinningMove(board) + " wins!", "CONNECT4", ConsoleColor.Green);
                 break;
             }
 
-            if (moveNum >= 10)
+            if (moveNum >= 20)
             {
-                Console.WriteLine("Abort!");
+                cText.WriteLine("Abort!", "CONNECT4", ConsoleColor.Red);
                 break;
             }
 
             moveNum++;
-        
-            //Let the current player make a move
-            Console.WriteLine("Player " + board.currentPlayerTurn + " make a move: ");
+            cText.WriteLine("Player " + board.currentPlayerTurn + " make a move: ", "CONNECT4", ConsoleColor.White);
             
             if (board.currentPlayerTurn == 1)
             {
@@ -58,14 +57,25 @@ public class LocalPlay
                 // board.MakeMove(move);
 
                 Random rand = new Random();
-                int move = rand.Next(1, 24);
-                board.MakeMove(move < 8 ? move : miniMax.GetBestMove(board).Column);
+                playersMove = rand.Next(1, 7);
+                // playersMove = miniMax.GetBestMove(board).Column;
+
+                //If the opponent can win on the next move, pick a different move
+                if (board.WinningMove(board) != 0)
+                {
+                    while (board.WinningMove(board) != 0)
+                    {
+                        playersMove = rand.Next(1, 7);
+                    }
+                }
+
+                board.MakeMove(playersMove);
             }
             else
             {
-                ReturnMove bestMove = miniMax.GetBestMove(board);
+                ReturnMove bestMove = miniMax.GetBestMove(board, playersMove);
                 board.MakeMove(bestMove.Column);
-                Console.WriteLine("Best move: " + bestMove.Column + " with score: " + bestMove.Score + " and iterations: " + bestMove.Iterations);
+                cText.WriteLine("Best move: " + bestMove.Column + " with score: " + bestMove.Score + " and iterations: " + bestMove.Iterations);
             }
         }
 

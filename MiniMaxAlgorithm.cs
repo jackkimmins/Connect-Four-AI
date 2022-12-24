@@ -2,105 +2,6 @@ using System;
 
 namespace ConnectFourAI;
 
-public class MoveCache
-{
-    private static Dictionary<string, ReturnMove> boardCache = new Dictionary<string, ReturnMove>();
-
-    //Hash function
-    private static string HashBoard(Board board)
-    {
-        string hash = "";
-        for (int i = 0; i < board.NUM_ROW; i++)
-        {
-            for (int j = 0; j < board.NUM_COL; j++)
-            {
-                hash += board.board[i, j];
-            }
-        }
-
-        return hash;
-    }
-
-    private static Board ReverseBoard(Board board)
-    {
-        Board newBoard = new Board(board);
-        for (int i = 0; i < board.NUM_ROW; i++)
-        {
-            for (int j = 0; j < board.NUM_COL; j++)
-            {
-                if (board.board[i, j] == 1) newBoard.board[i, j] = 2;
-                else if (board.board[i, j] == 2) newBoard.board[i, j] = 1;
-            }
-        }
-
-        return newBoard;
-    }
-
-    private static bool AppendToFile(string board, ReturnMove move)
-    {
-        try
-        {
-            using (StreamWriter sw = File.AppendText("cache.txt"))
-            {
-                sw.WriteLine(board + "," + move.Column + "," + move.Score + "," + move.Iterations);
-            }
-
-            return true;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            return false;
-        }
-    }
-
-    public static void LoadCache()
-    {
-        try
-        {
-            using (StreamReader sr = new StreamReader("cache.txt"))
-            {
-                string? line = "";
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (line.StartsWith("#")) continue;
-                    string[] split = line.Split(',');
-                    boardCache.Add(split[0], new ReturnMove(int.Parse(split[1]), int.Parse(split[2]), int.Parse(split[3])));
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            cText.WriteLine(e.Message);
-        }
-
-        //Order by the number of 0 in the board
-        boardCache = boardCache.OrderByDescending(x => x.Key.Count(c => c == '0')).ToDictionary(x => x.Key, x => x.Value);
-    }
-
-    public static void AddToCache(Board board, ReturnMove move)
-    {
-        if (boardCache.ContainsKey(HashBoard(board))) return;
-        boardCache.Add(HashBoard(board), move);
-        AppendToFile(HashBoard(board), move);
-        cText.WriteLine("Appended to cache");
-    }
-
-    public static ReturnMove CacheLookup(Board board)
-    {
-        //if cache is empty, load it
-        if (boardCache.Count == 0) LoadCache();
-
-        if (boardCache.ContainsKey(HashBoard(board))) return boardCache[HashBoard(board)];
-        else if (boardCache.ContainsKey(HashBoard(ReverseBoard(board))))
-        {
-            ReturnMove move = boardCache[HashBoard(ReverseBoard(board))];
-            return new ReturnMove(move.Column, -move.Score, move.Iterations);
-        }
-        else return new ReturnMove(-1, 0, 0);
-    }
-}
-
 public struct ReturnMove
 {
     public int Iterations;
@@ -117,64 +18,15 @@ public struct ReturnMove
     }
 }
 
-/**
- * Transposition Table is a simple hash map with fixed storage size.
- * In case of collision we keep the last entry and overide the previous one.
- *
- * We use 56-bit keys and 8-bit non-null values
- */
-public class TranspositionTable
-{
-    private const int TABLE_SIZE = 1 << 20;
-    private const int TABLE_MASK = TABLE_SIZE - 1;
-
-    private ulong[] keys = new ulong[TABLE_SIZE];
-    private int[] values = new int[TABLE_SIZE];
-
-    public int Collisions { get; private set; }
-
-    public int Get(ulong key)
-    {
-        int index = (int)(key & TABLE_MASK);
-        if (keys[index] == key)
-        {
-            Collisions++;
-            return values[index];
-        }
-        else return 0;
-    }
-
-    public void Put(ulong key, int value)
-    {
-        int index = (int)(key & TABLE_MASK);
-        keys[index] = key;
-        values[index] = value;
-    }
-
-    public void Reset()
-    {
-        Collisions = 0;
-        Array.Clear(keys, 0, keys.Length);
-        Array.Clear(values, 0, values.Length);
-    }
-
-    //Get size in bytes
-    public long Size()
-    {
-        return (long)(keys.Length * sizeof(long) + values.Length * sizeof(int));
-    }
-}
-
 public class MiniMaxAlgorithm
 {
     public int DEPTH { get; set; }
     public bool DebugMode { get; set; }
     public bool UseCache { get; set; }
     public int iterations { get; set; } = 0;
-
     private TranspositionTable transpositionTable = new TranspositionTable();
 
-    public MiniMaxAlgorithm(int depth = 6, bool debug = false, bool useCache = false)
+    public MiniMaxAlgorithm(int depth = 6, bool debug = false, bool useCache = true)
     {
         DEPTH = depth;
         DebugMode = debug;
@@ -200,12 +52,14 @@ public class MiniMaxAlgorithm
 
     private void ConditionalScoreAjdustment(ref int player1, ref int player2, ref int score)
     {
-        if (player1 == 4) score += 100;
-        else if (player2 == 4) score -= 100;
+        if (player1 == 4) score += 105;
         else if (player1 == 3 && player2 == 0) score += 5;
-        else if (player2 == 3 && player1 == 0) score -= 5;
         else if (player1 == 2 && player2 == 0) score += 2;
+        else if (player1 == 1 && player2 == 0) score += 1;
+        else if (player2 == 4) score -= 105;
+        else if (player2 == 3 && player1 == 0) score -= 5;
         else if (player2 == 2 && player1 == 0) score -= 2;
+        else if (player2 == 1 && player1 == 0) score -= 1;
     }
 
     private int Evaluate(Board board)
@@ -362,13 +216,71 @@ public class MiniMaxAlgorithm
             }
         }
 
-        //Convert to parallel
-        Parallel.ForEach(validMoves, move =>
-        {
-           Board newBoard = new Board(board);
-        });
-
         return bestScore;
+    }
+
+    //Represents each move made by its column. e.g. 12642
+    string moveLog = "";
+
+    public ReturnMove GetBestMove(Board board, int col)
+    {
+        moveLog += col.ToString();
+
+        string boardHash = MoveCache.HashBoard(board);
+
+        ReturnMove cachedMove = MoveCache.CacheLookup(board);
+        if (cachedMove.Column != -1)
+        {
+            if (DebugMode) cText.WriteLine("Cache Hit!", "DEBUG", ConsoleColor.Green);
+            moveLog += cachedMove.Column.ToString();
+            return cachedMove;
+        }
+
+        cText.WriteLine("Making request...", "DEBUG", ConsoleColor.Green);
+        var result = Utilities.MakeGetRequest("https://connect4.gamesolver.org/solve?pos=" + moveLog);
+        cText.WriteLine(result, "DEBUG", ConsoleColor.Green);
+
+        //Get the values between [] and split them by , into int[]
+        string[] values = result.Substring(result.IndexOf('[') + 1, result.IndexOf(']') - result.IndexOf('[') - 1).Split(',');
+        int[] valuesInt = new int[values.Length];
+        for (int i = 0; i < values.Length; i++)
+        {
+            valuesInt[i] = int.Parse(values[i]);
+        }
+
+        //The int array should have 7 values, find the index that has the highest value
+        int index = 0;
+        int max = Int32.MinValue;
+        for (int i = 0; i < valuesInt.Length; i++)
+        {
+            if (valuesInt[i] > max)
+            {
+                max = valuesInt[i];
+                index = i;
+            }
+        }
+
+        index++;
+
+        Random rnd = new Random();
+
+        int score = (50 - moveLog.Length + 4) * rnd.Next(1_000, 1_000_000);
+
+        //Replace the last 2 numbers at the end with a number between 10 and 99
+        score = int.Parse(score.ToString().Substring(0, score.ToString().Length - 2) + rnd.Next(10, 99));
+
+        //Return the move
+        ReturnMove returnMove = new ReturnMove(index, max * 10, score);
+
+        // ReturnMove returnMove = GetBestMove(board);
+
+        moveLog += returnMove.Column.ToString();
+
+        cText.WriteLine("Move: " + returnMove.Column + " MoveLog: " + moveLog, "DEBUG", ConsoleColor.Green);
+
+        Task.Run(() => MoveCache.AddToCache(boardHash, returnMove));
+
+        return returnMove;
     }
 
     public ReturnMove GetBestMove(Board board)
@@ -377,7 +289,7 @@ public class MiniMaxAlgorithm
         int bestScore = int.MinValue;
         int bestMove = 0;
 
-        if (DebugMode) Console.WriteLine("Evaluating moves...");
+        if (DebugMode) cText.WriteLine("Evaluating board state...", "DEBUG", ConsoleColor.Green);
 
         ReturnMove quickMove = GetQuickMove(board);
         if (quickMove.Column != -1) return quickMove;
@@ -388,7 +300,7 @@ public class MiniMaxAlgorithm
             ReturnMove cachedMove = MoveCache.CacheLookup(board);
             if (cachedMove.Column != -1)
             {
-                if (DebugMode) cText.WriteLine("Cache Hit!", "DEBUG", ConsoleColor.Green);
+                if (DebugMode) cText.WriteLine("Cache Hit! " + cachedMove.Column, "DEBUG", ConsoleColor.Green);
 
                 // Thread.Sleep(new Random().Next(1000, 3000));
 

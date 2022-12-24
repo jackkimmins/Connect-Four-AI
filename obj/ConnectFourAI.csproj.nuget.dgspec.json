@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jackk\\OneDrive\\My Projects\\Connect-Four-AI\\ConnectFourAI.csproj": {}
+    "/root/CODE/CSharp/Jindium-ConnectFour/ConnectFourAI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jackk\\OneDrive\\My Projects\\Connect-Four-AI\\ConnectFourAI.csproj": {
+    "/root/CODE/CSharp/Jindium-ConnectFour/ConnectFourAI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jackk\\OneDrive\\My Projects\\Connect-Four-AI\\ConnectFourAI.csproj",
+        "projectUniqueName": "/root/CODE/CSharp/Jindium-ConnectFour/ConnectFourAI.csproj",
         "projectName": "ConnectFourAI",
-        "projectPath": "C:\\Users\\jackk\\OneDrive\\My Projects\\Connect-Four-AI\\ConnectFourAI.csproj",
-        "packagesPath": "C:\\Users\\jackk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jackk\\OneDrive\\My Projects\\Connect-Four-AI\\obj\\",
+        "projectPath": "/root/CODE/CSharp/Jindium-ConnectFour/ConnectFourAI.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/root/CODE/CSharp/Jindium-ConnectFour/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\jackk\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -64,7 +62,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.307\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/dotnet6-6.0.110/sdk/6.0.110/RuntimeIdentifierGraph.json"
         }
       }
     }

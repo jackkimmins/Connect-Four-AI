@@ -7,7 +7,7 @@ namespace ConnectFourAI;
 class Game
 {
     public Board board = new Board();
-    public MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(17, true);
+    public MiniMaxAlgorithm miniMax = new MiniMaxAlgorithm(17, true, true);
 }
 
 public class ConnectFourWebServer
@@ -90,6 +90,7 @@ public class ConnectFourWebServer
             }
 
             //AI move
+            // ReturnMove bestMove = games[gameID].miniMax.GetBestMove(games[gameID].board, int.Parse(data["col"]));
             ReturnMove bestMove = games[gameID].miniMax.GetBestMove(games[gameID].board);
             games[gameID].board.MakeMove(bestMove.Column);
 

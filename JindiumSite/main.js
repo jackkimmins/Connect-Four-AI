@@ -144,7 +144,8 @@ function PlaceCell(colNum)
 
 function AddMove(column, player, numIterations = null, score = null)
 {
-    if (movesCount > 5)
+    //count the number of tr
+    if ($('#moves tr').length >= 10)
     {
         $('#moves tbody tr:last').remove();
     }
@@ -161,6 +162,122 @@ function AddMove(column, player, numIterations = null, score = null)
     movesCount++;
 }
 
+function DropToken(colNum)
+{
+    let winningMsg = '';
+
+    $.ajax({
+        url: './dropToken',
+        type: 'POST',
+        data: { col: colNum + 1 },
+        beforeSend: function() {
+            waitingForMove = true;
+        },
+        statusCode: {
+            400: function (res) {
+                alert(res);
+            },
+            201: function (res) {
+                let json = JSON.parse(res);
+                console.log(json);
+                AddMove(json.Column, currentPlayer, json.Iterations, json.Score);
+                PlaceCell(json.Column - 1);
+            },
+            200: function (res) {
+                let json = JSON.parse(res);
+                AddMove(json.Column, currentPlayer, json.Iterations, json.Score);
+                PlaceCell(json.Column - 1);
+                gameEnded = true;
+                winningMsg = 'You lost!';
+            },
+            203: function (res) {
+                gameEnded = true;
+                winningMsg = 'You won!';
+            },
+            406: function (res) {
+                NewGame();
+            }
+        },
+        complete: function() {
+            waitingForMove = false;
+            if (gameEnded)
+            {
+                if (winningMsg === 'You lost!')
+                {
+                    new Audio('./audio/loss.mp3').play();
+                }
+                else
+                {
+                    new Audio('./audio/win.mp3').play();
+                }
+
+                const winningCells = GetWinningCells();
+                for (let i = 0; i < winningCells.length; i++)
+                {
+                    winningCells[i].classList.add('winning');
+                }
+
+                $('#turn').text(winningMsg);
+
+                //Wait 3 seconds before starting a new game
+                // setTimeout(function() {
+                //     NewGame();
+                //     RandomDrop();
+                // }, 3000);
+            }
+        },
+        success: function (res) {
+            // if (!gameEnded)
+            // {
+            //     //if more than 20 moves have been made, reset the game
+            //     if (movesCount > 20)
+            //     {
+            //         NewGame();
+            //     }
+
+            //     RandomDrop();
+            // }
+        }
+    });
+}
+
+function ShuffleArray(array)
+{
+    for (let i = array.length - 1; i > 0; i--)
+    {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+
+    return array;
+}
+
+function RandomDrop()
+{
+    //Click on a random column
+    let colNum = Math.floor(Math.random() * 7);
+
+    //Wait for 1 second before making the move
+    setTimeout(function() {
+        //Check that the column is not full, if it is try a different column
+        let col = $(`[data-col=${colNum}]`);
+        let colCells = col.toArray().reverse();
+
+        //Shuffle the column cells
+        colCells = ShuffleArray(colCells);
+
+        for (let i = 0; i < colCells.length; i++)
+        {
+            let cell = colCells[i];
+            if (!cell.classList.contains('player1') && !cell.classList.contains('player2'))
+            {
+                cell.click();
+                break;
+            }
+        }
+    }, 1000);
+}
+
 $('#grid').click(function(e) {
     if (gameEnded || waitingForMove) return;
 
@@ -173,63 +290,7 @@ $('#grid').click(function(e) {
         AddMove(colNum + 1, currentPlayer);
         PlaceCell(colNum);
 
-        let winningMsg = '';
-
-        $.ajax({
-            url: './dropToken',
-            type: 'POST',
-            data: { col: colNum + 1 },
-            beforeSend: function() {
-                waitingForMove = true;
-            },
-            statusCode: {
-                400: function (res) {
-                    alert(res);
-                },
-                201: function (res) {
-                    let json = JSON.parse(res);
-                    console.log(json);
-                    AddMove(json.Column, currentPlayer, json.Iterations, json.Score);
-                    PlaceCell(json.Column - 1);
-                },
-                200: function (res) {
-                    let json = JSON.parse(res);
-                    AddMove(json.Column, currentPlayer, json.Iterations, json.Score);
-                    PlaceCell(json.Column - 1);
-                    gameEnded = true;
-                    winningMsg = 'You lost!';
-                },
-                203: function (res) {
-                    gameEnded = true;
-                    winningMsg = 'You won!';
-                },
-                406: function (res) {
-                    NewGame();
-                }
-            },
-            complete: function() {
-                waitingForMove = false;
-                if (gameEnded)
-                {
-                    if (winningMsg === 'You lost!')
-                    {
-                        new Audio('./audio/loss.mp3').play();
-                    }
-                    else
-                    {
-                        new Audio('./audio/win.mp3').play();
-                    }
-
-                    const winningCells = GetWinningCells();
-                    for (let i = 0; i < winningCells.length; i++)
-                    {
-                        winningCells[i].classList.add('winning');
-                    }
-
-                    $('#turn').text(winningMsg);
-                }
-            }
-        });
+        DropToken(colNum);
     }
 
 });
@@ -248,6 +309,7 @@ function NewGame()
     currentPlayer = 2;
     SwitchTurn();
     waitingForMove = false;
+    movesCount = 0;
 
     CreateCells();
 }
