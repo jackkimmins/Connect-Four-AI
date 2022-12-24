@@ -26,6 +26,7 @@ public class MiniMaxAlgorithm
     public int iterations { get; set; } = 0;
     private TranspositionTable transpositionTable = new TranspositionTable();
 
+    //Constructor
     public MiniMaxAlgorithm(int depth = 6, bool debug = false, bool useCache = true)
     {
         DEPTH = depth;
@@ -33,6 +34,7 @@ public class MiniMaxAlgorithm
         UseCache = useCache;
     }
 
+    //Gets a list of the columns that are not full
     private List<int> ValidMoves(ref Board board)
     {
         List<int> validMoves = new List<int>();
@@ -45,11 +47,13 @@ public class MiniMaxAlgorithm
         return validMoves;
     }
 
+    //Returns if the game is over for a given board
     private bool IsTerminal(Board board)
     {
         return board.WinningMove(board) != 0 || board.IsFull();
     }
 
+    //Adjusts the score based on points scored by both players
     private void ConditionalScoreAjdustment(ref int player1, ref int player2, ref int score)
     {
         if (player1 == 4) score += 105;
@@ -62,6 +66,7 @@ public class MiniMaxAlgorithm
         else if (player2 == 1 && player1 == 0) score -= 1;
     }
 
+    //Evaluates the board and returns a score
     private int Evaluate(Board board)
     {
         int score = 0;
@@ -146,6 +151,7 @@ public class MiniMaxAlgorithm
         return new ReturnMove(-1, 0, 0);
     }
 
+    //Determines if the board is in a quiet state
     private bool IsQuiet(ref Board board)
     {
         if (board.OpenFourInARowLines() > 0) return false;
@@ -154,7 +160,7 @@ public class MiniMaxAlgorithm
         return true;
     }
 
-    //Use the transposition table to store the best move for a given board state
+    //Using the minimax algorithm, alpha-beta pruning, and transposition tables, determine the best move.
     private int Minimax(Board board, int depth, int alpha, int beta, bool maximizingPlayer)
     {
         iterations++;
@@ -219,6 +225,7 @@ public class MiniMaxAlgorithm
         return bestScore;
     }
 
+    //Returns the best move for the current player
     public ReturnMove GetBestMove(Board board)
     {
         iterations = 0;
@@ -258,16 +265,11 @@ public class MiniMaxAlgorithm
             }
         });
 
-        if (DebugMode)
-        {
-            cText.WriteLine($"Best move: {bestMove} with score: {bestScore} Out of {iterations.ToString("N0")} iterations.", "DEBUG", ConsoleColor.Green);
-            // Thread.Sleep(2000);
-        }
+        if (DebugMode) cText.WriteLine($"Best move: {bestMove} with score: {bestScore} Out of {iterations.ToString("N0")} iterations.", "DEBUG", ConsoleColor.Green);
 
         ReturnMove returnMove = new ReturnMove(bestMove, bestScore, iterations, transpositionTable.Collisions);
 
         // if (UseCache) Task.Run(() => MoveCache.AddToCache(board, returnMove));
-
         // transpositionTable.Reset();
 
         return returnMove;
