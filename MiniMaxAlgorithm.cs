@@ -170,11 +170,11 @@ public class MiniMaxAlgorithm
             return Evaluate(board);
         }
 
-        ReturnMove quickMove = GetQuickMove(board);
-        if (quickMove.Column != -1)
-        {
-            return quickMove.Score;
-        }
+        // ReturnMove quickMove = GetQuickMove(board);
+        // if (quickMove.Column != -1)
+        // {
+        //     return quickMove.Score;
+        // }
 
         int bestScore = maximizingPlayer ? int.MinValue : int.MaxValue;
 
@@ -251,6 +251,7 @@ public class MiniMaxAlgorithm
             }
         }
 
+        //Check the 7 columns for the best move
         Parallel.ForEach(ValidMoves(ref board), move =>
         {
             Board newBoard = new Board(board);
