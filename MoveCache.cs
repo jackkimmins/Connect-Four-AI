@@ -110,7 +110,7 @@ public class MoveCache
         {
             if (move.Key == hash || move.Key == reverseHash)
             {
-                //check if the move is valid
+                //Check if the move is valid
                 if (board.ValidMove(move.Value.Column))
                 {
                     returnMove = move.Value;
