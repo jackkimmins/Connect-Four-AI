@@ -111,6 +111,8 @@ public class Board
 
     public bool MakeMove(int column) => MakeMove(column, currentPlayerTurn);
 
+    public bool ValidMove(int column) => board[0, column - 1] == 0;
+
     //Find the next winning move and returns the column, if no winning move is found, returns 0. If it is a draw, returns -1
     public int WinningMove(Board board)
     {

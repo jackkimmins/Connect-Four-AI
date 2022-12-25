@@ -103,13 +103,22 @@ public class MoveCache
         //If cache is empty, load it
         if (boardCache.Count == 0) LoadCache();
 
-        if (boardCache.ContainsKey(HashBoard(board))) return boardCache[HashBoard(board)];
-        else if (boardCache.ContainsKey(HashBoard(ReverseBoard(board))))
+        ReturnMove returnMove = new ReturnMove(-1, 0, 0);
+        string hash = HashBoard(board), reverseHash = HashBoard(ReverseBoard(board));
+
+        Parallel.ForEach(boardCache, (move) =>
         {
-            ReturnMove move = boardCache[HashBoard(ReverseBoard(board))];
-            return new ReturnMove(move.Column, -move.Score, move.Iterations);
-        }
-        
-        else return new ReturnMove(-1, 0, 0);
+            if (move.Key == hash || move.Key == reverseHash)
+            {
+                //check if the move is valid
+                if (board.ValidMove(move.Value.Column))
+                {
+                    returnMove = move.Value;
+                    return;
+                }   
+            }
+        });
+
+        return returnMove;
     }
 }
